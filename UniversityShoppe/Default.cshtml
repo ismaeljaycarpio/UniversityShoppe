@@ -1,0 +1,58 @@
+﻿@{
+    Page.Title = "Home";
+
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT * FROM tblProducts " +
+                    "INNER JOIN Settings ON tblProducts.productID = Settings.featuredProduct";
+    var product = db.QuerySingle(sqlSelect);
+    
+}
+
+
+@if (product != null)
+{
+
+        <h1 class="homePageHeading">Featured Product</h1>
+        <div id="featuredProductImage">
+            <p>@Products.ShowProductImage(product.productID.ToString())</p>
+        </div>
+        <div id="featuredProductDetails">
+            <a href="/ProductDetails/@product.productID">
+                <h2>@product.productName</h2>
+            </a>
+
+            <p>
+                @product.description
+            </p>
+
+            <p class="price">
+                Php @product.price
+            </p>
+        </div>
+}
+
+
+
+@{
+    sqlSelect = "SELECT TOP(4)*  FROM tblProducts ORDER BY datePosted DESC";
+    var latestProduct = db.Query(sqlSelect);
+}
+@if (latestProduct.Count() > 0)
+{
+    <div id="latestProducts">
+        <h1 class="homePageHeading">Latest Products</h1>
+        <ul id="latestProductsList">
+            @foreach (var item in latestProduct)
+            {
+                <li>
+                    <a href="/ProductDetails/@item.productID" class="detailsButton">
+                        @Products.ShowProductThumbnail(item.productID.ToString())
+                    </a>
+                    <p>
+                        <strong>@item.productName</strong>
+                    </p>
+                </li>
+            }
+        </ul>
+    </div>
+}

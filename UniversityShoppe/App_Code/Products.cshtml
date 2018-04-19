@@ -1,0 +1,207 @@
+﻿@helper CategoriesDropDownList(string name, string selectedValue, bool isEdit)
+{
+    
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT catID, catName FROM tblCategories ORDER BY catName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var category in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = category.catID.ToString(),
+                Text = category.catName.ToString()
+            });
+    }
+    
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new {@disabled="disabled"});
+    }
+    else
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    }
+    
+         
+    
+}
+
+
+
+@helper ProductsDropDownList(string name, string selectedValue, bool isEdit)
+{
+    
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT productID, productName FROM tblProducts ORDER BY productName";
+    var result = db.Query(sqlSelect);
+
+    // Add "Not Selected..." option 
+    optionList.Add(new SelectListItem { Value = "0", Text = "Not selected..." });
+
+    foreach (var product in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = product.productID.ToString(),
+                Text = product.productName.ToString()
+            });
+    }
+    
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new  {@disabled="disabled"});
+    }
+    else{
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    }
+    
+}
+
+
+
+@helper TypeDropDownList(string name, string selectedValue, bool isEdit)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT typeID, typeName FROM tblType ORDER BY typeName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var type in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = type.typeID.ToString(),
+                Text = type.typeName.ToString()
+            });
+    }
+    
+    
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new  {@disabled="disabled"});
+    }
+    else
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    }
+    
+}
+
+@helper ConditionDropDownList(string name, string selectedValue, bool isEdit)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT conditionID, conditionName FROM tblCondition ORDER BY conditionName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var condition in result)
+    {
+        optionList.Add(new SelectListItem
+        {
+            Value = condition.conditionID.ToString(),
+            Text = condition.conditionName.ToString()
+        });
+    }
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new  {@disabled="disabled"});
+    }
+    else
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    }
+}
+
+@helper StatusDropDownList(string name, string selectedValue, bool isEdit)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT statusID, statusName FROM tblStatus ORDER BY statusName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var status in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = status.statusID.ToString(),
+                Text = status.statusName.ToString()
+            });
+    }
+    
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new  {@disabled="disabled"});
+    }
+    else
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    }
+}
+
+@helper ApprovalDropDownList(string name, string selectedValue, bool isEdit)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT approvalID, approvalName FROM tblApproval ORDER BY approvalName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var approval in result)
+    {
+        optionList.Add(new SelectListItem
+         {
+             Value = approval.approvalID.ToString(),
+             Text = approval.approvalName.ToString()
+         });
+    }
+    
+    if(isEdit == true)
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, new  {@disabled="disabled"});
+    }
+    else
+    {
+        @Html.DropDownList(name, null, optionList, selectedValue, null);
+    } 
+}
+
+@helper ShowProductImage(string productID)
+{
+    var imagePath = @"~/ProductImages/" + productID + ".png";
+    if (!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ProductImages/noImage.png";
+
+    }   
+    <img src="@Href(imagePath)" alt="Product Image" />
+}
+@helper ShowProductThumbnail(string productID)
+{
+    var imagePath = @"~/ProductImages/" + productID + "_thumb.png";
+    if (!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ProductImages/noThumb.png";
+
+    }   
+    <img src="@Href(imagePath)" alt="Product Image" />
+}
+
+
+@helper ShowAdsImages(string adsID)
+{
+    var imagePath = @"~/AdsImages/" + adsID + ".png";
+    if (!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/AdsImages/noImage.png";
+
+    }   
+    <img src="@Href(imagePath)" alt="Ads Image" />
+}

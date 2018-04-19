@@ -1,0 +1,34 @@
+﻿@helper AccountSummary()
+{
+    
+    if (WebSecurity.IsAuthenticated)
+    {
+    <text>
+    Welcome <a href="@Href("~/Account/MyProfile.cshtml")">
+        @WebSecurity.CurrentUserName</a> | </text>
+    
+        if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+        {
+            <text>
+                <a href="@Href("~/Admin/Default")">Admin Panel</a> |
+            </text>
+        }
+        else
+        {
+            <text>
+                <a href="@Href("~/Member/MyPost/MyStore")">My Store</a> |
+            </text>    
+        }
+
+    <a href="@Href("~/Account/Logout.cshtml")">Logout</a>
+
+
+    }
+    else
+    {
+    <text>
+    <a href="@Href("~/Account/Login.cshtml")">Login</a> |
+            <a href="@Href("~/Account/Register.cshtml")">Register</a>
+    </text>
+    }
+}

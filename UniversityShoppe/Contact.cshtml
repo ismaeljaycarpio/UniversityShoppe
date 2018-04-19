@@ -1,0 +1,54 @@
+﻿@{
+    Page.Title = "Contact Us";
+    //Layout = "Your Layout Page goes here";
+
+    var name = "";
+    var email = "";
+    var subject = "";
+    var message = "";
+    
+}
+
+
+<div class="contentStandardForm">
+
+    <h1>Contact Us.</h1>
+
+        <form method="post" action="">
+
+        <p>
+            @Html.Label("Name:", name)
+            <br />
+            @Html.TextBox("email", email)
+        </p>
+        <br />
+
+        <p>
+            @Html.Label("Email Address:", email)
+            <br />
+            @Html.TextBox("email", email)
+        </p>
+        <br />
+
+         <p>
+            @Html.Label("Subject:", subject)
+            <br />
+            @Html.TextBox("subject", subject)
+        </p>
+        <br />
+
+        <p>
+            @Html.Label("Message:", message)
+            <br />
+            @Html.TextArea("message", message, 10, 40, null)
+            @Html.ValidationMessage("description")
+        </p>
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+
+
+
+    </form>
+</div>

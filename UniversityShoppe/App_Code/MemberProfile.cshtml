@@ -1,0 +1,20 @@
+﻿@helper ShowProfileImage(string UserId)
+{
+    var imagePath = @"~/ProfileImages/" + UserId + ".png";
+    if(!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ProfileImages/noImage.png";
+        
+    }   
+    <img src="@Href(imagePath)" alt="Profile Image" />
+}
+@helper ShowProfileImageThumbnail(string UserId)
+{
+    var imagePath = @"~/ProfileImages/" + UserId + "_thumb.png";
+    if(!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ProfileImages/noThumb.png";
+        
+    }   
+    <img src="@Href(imagePath)" alt="Profile Image" />
+}

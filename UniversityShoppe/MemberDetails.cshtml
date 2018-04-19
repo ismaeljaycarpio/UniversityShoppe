@@ -1,0 +1,62 @@
+﻿@{
+    Page.Title = "Title goes here";
+    //Layout = "Your Layout Page goes here";
+
+    var UserId = UrlData[0];
+
+    var db = Database.Open("StarterSite");
+    var sql = "SELECT UserProfile.UserId,UserProfile.userName,UserProfile.lastName,UserProfile.firstName, " +
+                "UserProfile.contactNo,UserProfile.CityProv,UserProfile.Occupation,webpages_Membership.CreateDate FROM UserProfile,webpages_Membership" +
+                " WHERE UserProfile.UserId = webpages_Membership.UserId AND UserProfile.UserId = @0";
+
+    var member = db.QuerySingle(sql, UserId);
+    
+    var sqlTotalPosts = "SELECT COUNT(productID) FROM tblProducts WHERE UserId = @0";
+    var totalPosts = db.QueryValue(sqlTotalPosts, UserId);
+}
+
+@if (member == null)
+{
+    <p>
+        No member's profile found.
+    </p>
+}
+else
+{
+    <h1>@member.userName 's Profile</h1>
+    
+    <div id="productDetails">
+        <p>
+            @MemberProfile.ShowProfileImage(UserId)
+        </p>
+
+        <h2>Recent Posts</h2>
+    </div>
+    
+    <div id="memberForm">
+        <fieldset>
+            <legend>Profile Details</legend>
+            <ul>
+                <li>
+                    <b>Member Since: </b> @member.CreateDate.ToLongDateString()
+                </li>
+                <li>
+                    <b>Name: </b>@member.firstName @member.lastName
+                </li>
+                <li>
+                    <b>Contact Number: </b> @member.contactNo
+                </li>
+                <li>
+                    <b>Occupation: </b>@member.Occupation
+                </li>
+                <li>
+                    <b>Address: </b> @member.CityProv
+                </li>
+                <li>
+                    <b>Total Posts:</b> @totalPosts
+                </li>
+            </ul>
+        </fieldset>
+    </div>
+
+}

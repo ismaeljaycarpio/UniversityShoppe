@@ -1,0 +1,32 @@
+﻿@{
+    Page.Title = "Featured Products";
+    //Layout = "Your Layout Page goes here";
+
+    var featuredProduct = "";
+    var db = Database.Open("StarterSite");
+
+    
+    
+    if(IsPost)
+    {
+        featuredProduct = Request["featuredProduct"];
+        var sqlUpdate = "UPDATE Settings SET featuredProduct = @0";
+        db.Execute(sqlUpdate, featuredProduct);
+
+        Response.Redirect("~/Admin/");
+    }
+
+    var sqlSelect = "SELECT featuredProduct FROM Settings";
+    featuredProduct = db.QuerySingle(sqlSelect).featuredProduct.ToString();
+    
+}
+
+<h1>Featured Product</h1>
+
+<form action="FeaturedProduct" method="post">
+    <p>
+        Featured Product:
+        @Products.ProductsDropDownList("featuredProduct", featuredProduct, false)
+        <input type="submit" value="Save" />
+    </p>
+</form>

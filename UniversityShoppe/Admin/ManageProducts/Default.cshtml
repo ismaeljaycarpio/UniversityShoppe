@@ -1,0 +1,47 @@
+﻿@{
+    Page.Title = "Products";
+    //Layout = "Your Layout Page goes here";
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT products.productID,products.productName, categories.catName,members.userName,datePosted,DATEDIFF(day,products.datePosted,GETDATE()) AS [DiffDate] " +
+                        "FROM tblProducts products " +
+                        "INNER JOIN tblCategories categories ON products.categoryID = categories.catID " +
+                        "INNER JOIN UserProfile members ON products.userID = members.UserId " +
+                         "ORDER BY products.datePosted";
+
+    var result = db.Query(sqlSelect);
+    var productGrid = new WebGrid(source: result,
+                               rowsPerPage: 5);
+    
+}
+<h1>Pending Products</h1>
+
+<form action="/Search" method="post">
+
+    <input type="text" name="searchKey" />
+    <input type="submit" value="Search" />
+
+</form>
+
+<div class="grid">
+    @productGrid.GetHtml(
+    tableStyle: "grid",
+    headerStyle: "gridHeader",
+    alternatingRowStyle: "gridAlt",
+    footerStyle: "gridFooter",
+    columns: productGrid.Columns(
+    productGrid.Column("userName", "Posted By"),
+    productGrid.Column("productName", "Product",
+    format: @<text>
+                    <a href="ProductDetails/@item.productID">@item.productName</a>
+            </text>),
+    productGrid.Column("catName", "Category"),
+    productGrid.Column("datePosted","Date Posted"),
+    productGrid.Column("DiffDate", "Days",
+    format:@<text>
+                @item.DiffDate days ago
+            </text>
+    )    
+            ))
+
+</div>
+

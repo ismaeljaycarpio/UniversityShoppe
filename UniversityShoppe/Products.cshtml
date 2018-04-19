@@ -1,0 +1,52 @@
+﻿@{
+    var catName = UrlData[0];
+
+    if (catName.IsEmpty())
+    {
+        Response.Redirect("/Default");
+    }
+
+    Page.Title = catName;
+
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT productID,productName,price FROM tblProducts " +
+            "LEFT OUTER JOIN tblCategories ON tblProducts.categoryID = tblCategories.catID " +
+                "WHERE tblCategories.catName = @0";
+
+    var products = db.Query(sqlSelect, catName);
+    
+
+}
+
+
+
+<div id="contentTitle">
+    <h1>@catName</h1>
+</div>
+
+@if (products.Count() == 0)
+{
+    <p>
+        No items found in this category.
+    </p>
+}
+else
+{
+    <ul id="productsList">
+        @foreach (var product in products)
+        {
+            <li>
+                <h3>
+                    <a href="/ProductDetails/@product.productID">@product.productName</a>
+                </h3>
+                <p class="price">
+                    Php @product.price
+                </p>
+
+                <p>
+                    @Products.ShowProductThumbnail(product.productID.ToString())
+                </p>  
+            </li>
+        }
+    </ul>   
+}

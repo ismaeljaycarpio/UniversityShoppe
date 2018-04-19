@@ -1,0 +1,134 @@
+﻿@{
+    Page.Title = "Profile";
+    //Layout = "Your Layout Page goes here";
+
+    var userId = WebSecurity.GetUserId(WebSecurity.CurrentUserName).ToString();
+
+    //init
+    var userName = "";
+    var lastName = "";
+    var firstName = "";
+    var contactNo = "";
+    var email = "";
+    var occupation = "";
+    var cityprov = "";
+    var memberSince = "";
+
+
+    var db = Database.Open("StarterSite");
+    var sql = "SELECT * FROM UserProfile WHERE UserId = @0";
+    var profile = db.QuerySingle(sql, userId);
+
+    //fill
+    userName = profile.userName;
+    lastName = profile.lastName;
+    firstName = profile.lastName;
+    contactNo = profile.contactNo;
+    email = profile.email;
+    occupation = profile.Occupation;
+    cityprov = profile.CityProv;
+
+    var memberShip = "SELECT * FROM webpages_Membership WHERE UserId = @0";
+    var member = db.QuerySingle(memberShip, userId);
+    memberSince = member.CreateDate.ToString();
+    
+      
+    
+}
+
+<h1>@userName's Profile</h1>
+
+<div id="profileSummary">
+    <div id="showProfileImage">
+        @MemberProfile.ShowProfileImage(userId)
+    </div>
+    <div id="showProfileSummary">
+        <p>
+            <h4>
+                Member since: 
+            </h4>
+                @memberSince
+        </p>
+    </div>     
+</div>
+
+<div class="standardForm">
+    Account Information
+    <input class="button" value="Edit Profile" type="submit" />
+</div>
+
+<div class="contentStandardForm">
+
+    <div class="row">
+        <label class="label" for="userName">Username:</label>
+        <span>@Html.TextBox("userName", userName, new { @disabled = "disabled" })</span>
+        @Html.ValidationMessage("userName")
+    </div>
+    <br />
+
+    <div class="row">
+        <label class="label" for="passWord">Password:</label>
+        <span><a href="@Href("~/Account/ChangePassword")">Change Password?</a></span>
+    </div>
+    <br />
+
+</div>
+
+
+<div class="standardForm">
+    Contact Information
+</div>
+
+<div class="contentStandardForm">
+    <div class="accountForm">
+
+        <form action="" method="post">
+
+            <div class="row">
+                <label class="label" for="lastName">Last Name:</label>
+                <span>@Html.TextBox("lastName", lastName, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("lastName")
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="label" for="firstName">First Name:</label>
+                <span>@Html.TextBox("firstName", firstName, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("firstName")
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="label" for="contactNo">Contact No:</label>
+                <span>@Html.TextBox("contactNo", contactNo, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("contactNo")
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="label" for="email">Email:</label>
+                <span>@Html.TextBox("email", email, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("email")
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="label" for="occupation">Occupation:</label>
+                <span>@Html.TextBox("occupation", occupation, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("occupation")
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="label" for="cityprov">City/Province:</label>
+                <span>@Html.TextBox("cityprov", cityprov, new { @disabled = "disabled" })</span>
+                @Html.ValidationMessage("cityprov")
+            </div>
+            <br />
+
+        </form>
+
+
+    </div>
+</div>
+

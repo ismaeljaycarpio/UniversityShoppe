@@ -1,0 +1,38 @@
+﻿@{
+    Page.Title = "Delete Category";
+    //Layout = "Your Layout Page goes here";
+    
+    var catID = UrlData[0];
+    if(catID.IsEmpty())
+    {
+        Response.Redirect("~/Admin/ManageCategories/");
+    }
+
+    var db = Database.Open("StarterSite");
+    
+    if(IsPost)
+    {
+        var sqlDelete = "DELETE FROM tblCategories WHERE catID = @0";
+        db.Execute(sqlDelete, catID);
+        Response.Redirect("~/Admin/ManageCategories/");
+    }
+
+    var sqlSelect = "SELECT * FROM tblCategories WHERE catID = @0";
+    var category = db.QuerySingle(sqlSelect,catID);
+    
+    
+}
+
+<h1>Delete Category</h1>
+
+<p>
+    Are you sure you want to delete the <b>@category.catName</b> category?
+</p>
+<p style="margin:">
+    <form action="" method="post" id="deleteForm">
+        <input type="button" onclick="window.location = '@Href("~/Admin/ManageCategories/")';"
+            value ="Cancel" />
+        <input type="submit" value="Delete" />
+
+    </form>
+</p>

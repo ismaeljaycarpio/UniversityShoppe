@@ -1,0 +1,54 @@
+﻿@{
+    Page.Title = "Choose ";
+    //Layout = "Your Layout Page goes here";
+
+    var showForm = "";
+
+    if (IsPost)
+    {
+        showForm = Request["showForm"];
+
+        if (showForm == "products")
+        {
+            Response.Redirect("~/Member/ProductDetails");
+        }
+        else
+        {
+            Response.Redirect("~/Member/ServiceDetails");
+        }
+
+    }
+}
+
+<h3>Choose what kind of post you want to submit.</h3>
+
+<div class="standardForm">
+
+    <form action="" method="post">
+
+    <div class="row">
+        <label class="label" for="userName">Products</label>
+        <span>@Html.RadioButton("showForm", "products", true)</span>
+        @Html.ValidationMessage("userName")
+    </div>
+    <br />
+
+    <div class="row">
+        <label class="label" for="userName">Services</label>
+        <span>@Html.RadioButton("showForm", "services", false)</span>
+        @Html.ValidationMessage("userName")
+    </div>
+    <br />
+
+
+    <p>
+        <input type="submit" value="Go" />
+    </p>
+        
+
+
+</form>
+
+</div>
+
+

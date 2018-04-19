@@ -1,0 +1,40 @@
+﻿@{
+    Page.Title = "Edit Category";
+    //Layout = "Your Layout Page goes here";
+
+    
+    var catID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+    var catName = "";
+
+    var db = Database.Open("StarterSite");
+    
+    if(IsPost)
+    {
+        catID = Request["catID"];
+        catName = Request["catName"];
+        
+        if(ModelState.IsValid)
+        {
+            var sqlUpdate = "UPDATE tblCategories SET catName = @0 WHERE catID = @1;";
+            db.Execute(sqlUpdate, catName, catID);
+
+            Response.Redirect("~/Admin/ManageCategories/");
+        }
+    }
+    else{
+        var sqlSelect = "SELECT * FROM tblCategories WHERE catID = @0";
+        catName = db.QuerySingle(sqlSelect, catID).catName;
+    }
+}
+
+<h1>Edit Category</h1>
+
+<form action="" method="post">
+    <p>
+        Category Name:
+        @Html.Hidden("catID",catID)
+        @Html.TextBox("catName", catName)
+        <input type="submit" value="Update" />
+        @Html.ValidationMessage("catName")
+    </p>
+</form>

@@ -1,0 +1,271 @@
+﻿@{
+    Page.Title = "Product";
+    //Layout = "Your Layout Page goes here";
+
+    //init
+    var productID = "new";
+    var productName = "";
+    var description = "";
+    var price = "";
+    var categoryID = "";
+    var datePosted = "";
+    var UserId = "";
+    var typeID = "";
+    var conditionID = "";
+    var quantity = "";
+    var statusID = "";
+    var approvalID = "";
+
+
+    var db = Database.Open("StarterSite");
+
+
+    //Display product info
+    if (!UrlData[0].IsEmpty())
+    {
+        productID = UrlData[0];
+        var sqlSelect = "SELECT * FROM tblProducts WHERE productID = @0";
+        var product = db.QuerySingle(sqlSelect, productID);
+
+        productName = product.productName;
+        description = product.description;
+        price = product.price.ToString();
+        categoryID = product.categoryID.ToString();
+        datePosted = product.datePosted.ToString();
+        UserId = product.UserId.ToString();
+        typeID = product.typeID.ToString();
+        conditionID = product.conditionID.ToString();
+        quantity = product.quantity.ToString();
+        statusID = product.statusID.ToString();
+        approvalID = product.approvalID.ToString();
+    }
+
+    //Validate
+    if(productID == "new")
+    {
+        Validation.Add("productName", Validator.Required("Title is a required field"));
+        Validation.Add("description", Validator.Required("Description is a required field"));
+        Validation.Add("quantity", Validator.Required("Quantity is a required field"));
+        Validation.Add("price", Validator.Required("Price is a required field")); 
+    }
+    else{
+        Validation.Add("price", Validator.Required("Price is a required field")); 
+    }
+    
+
+    if (IsPost)
+    {
+        var sqlStatement = "";
+
+        if (Validation.IsValid())
+        {
+
+            productID = Request["productID"];
+            productName = Request["productName"];
+            description = Request["description"];
+            price = Request["price"];
+            categoryID = Request["categoryID"];
+            datePosted = DateTime.Now.ToString();
+            UserId = WebSecurity.GetUserId(WebSecurity.CurrentUserName).ToString();
+            typeID = Request["typeID"];
+            conditionID = Request["conditionID"];
+            quantity = Request["quantity"];
+            statusID = Request["statusID"];
+
+
+            //Insert new product
+            if (productID == "new")
+            {
+                sqlStatement = "INSERT INTO tblProducts (productName,description,price,categoryID,datePosted,UserId,typeID,conditionID,quantity,statusID,approvalID) " +
+                            "VALUES(@0,@1,@2,@3,@4,@5,@6,@7,@8,@9,@10)";
+
+                statusID = "1";
+                approvalID = "1";
+
+                db.Execute(sqlStatement, productName, description,
+                                price, categoryID, datePosted, UserId,
+                                typeID, conditionID, quantity, statusID, approvalID);
+
+                productID = db.GetLastInsertId().ToString();
+
+
+            }
+            //Update existing product
+            else
+            {
+                var sql = "UPDATE tblProducts SET price = @0, statusID = @1 WHERE productID = @2";
+
+                db.Execute(sql, price, statusID, productID);
+
+            }
+
+            var productImage = WebImage.GetImageFromRequest();
+            if (productImage != null)
+            {
+                // Save main product image
+                var savePath = @"~\ProductImages\" + productID;
+                productImage.Resize(width: 300, height: 266,
+                    preserveAspectRatio: true, preventEnlarge: true);
+                productImage.Save(filePath: savePath + ".png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true);
+
+                // Resize and save thumbnail
+                productImage.Resize(height: 120, width: 120,
+                                    preserveAspectRatio: true);
+                productImage.Save(filePath: savePath + "_thumb.png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true);
+            }
+            Response.Redirect("~/Member/MyPost/MyStore/");
+
+        }
+    } 
+}
+
+<h1>Product Details</h1>
+
+<fieldset class="accountForm">
+
+    <legend>Product Details</legend>
+    <form method="post"  enctype="multipart/form-data">
+
+        <div class="row">
+            <label class="label" for="categoryID">Category:</label>
+            @if (productID == "new")
+            {
+                <span>@Products.CategoriesDropDownList("categoryID", categoryID, false)</span>
+            }
+            else
+            {
+                <span>@Products.CategoriesDropDownList("categoryID", categoryID, true)</span>
+            }
+
+        </div>
+        <br />
+        <p>
+            @Html.Hidden("productID", productID)
+        </p>
+
+        <div class="row">
+            <label class="label" for="productName">Product Name: *</label>
+            @if (productID == "new")
+            {
+                <span>@Html.TextBox("productName", productName)</span>
+                @Html.ValidationMessage("productName")
+            }
+            else
+            { 
+                <span>@Html.TextBox("productName", productName, new { @disabled = "disabled" })</span>
+            }
+
+        </div>
+        <br />
+
+
+        <div class="row">
+            <label class="label" for="description">Description: *</label>
+            @if (productID == "new")
+            {
+                <span>@Html.TextArea("description", description, 10, 40, null)</span>
+                @Html.ValidationMessage("description")
+            }
+            else
+            {
+                <span>@Html.TextArea("description", description, 10, 40, new { @disabled = "disabled" })</span>
+            }
+
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="price">Price: *</label>
+            <span>@Html.TextBox("price", price)</span>
+            @Html.ValidationMessage("price")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="quantity">Quantity: *</label>
+            @if (productID == "new")
+            {
+                <span>@Html.TextBox("quantity", quantity)</span>
+                @Html.ValidationMessage("quantity")
+            }
+            else
+            {
+                <span>@Html.TextBox("quantity", quantity, new { @disabled = "disabled" })</span>
+            }
+
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="productImage">Image: *</label>
+            @if (productID == "new")
+            {
+                <input type="file" name="productImage" />
+            }
+            else
+            {
+                <p>Cannot edit image</p>
+                <p>@Products.ShowProductImage(productID)</p>
+            }
+        </div>
+        <br />
+            
+        <div class="row">
+            <label class="label" for="typeID">Type:</label>
+            @if (productID == "new")
+            {
+                <span>@Products.TypeDropDownList("typeID", typeID, false)</span>
+            }
+            else
+            {
+                <span>@Products.TypeDropDownList("typeID", typeID, true)</span>
+            }
+
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="conditionID">Condition: </label>
+            @if (productID == "new")
+            {
+                <span>@Products.ConditionDropDownList("conditionID", conditionID, false)</span>
+            }
+            else
+            {
+                <span>@Products.ConditionDropDownList("conditionID", conditionID, true)</span> 
+            }
+
+        </div>
+        <br />
+
+        @if (productID != "new")
+        {
+            <div class="row">
+                <label class="label" for="statusID">Status: </label>
+                <span>@Products.StatusDropDownList("statusID", statusID, false)</span>
+            </div>
+            <br />
+        }
+
+        @if (Roles.IsUserInRole("Admin"))
+        {
+            <div class="row">
+                <label class="label" for="approvalID">Approval: </label>
+                <span>@Products.ApprovalDropDownList("approvalID", approvalID, false)</span>
+            </div>
+            <br />
+        }
+
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+
+ 
+    </form>
+</fieldset>
+

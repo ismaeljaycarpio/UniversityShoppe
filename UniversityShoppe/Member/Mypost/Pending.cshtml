@@ -1,0 +1,72 @@
+﻿@{
+    Page.Title = "Pending Posts";
+    //Layout = "Your Layout Page goes here";
+
+    var userId = WebSecurity.CurrentUserId;
+    var db = Database.Open("StarterSite");
+    var sql = "SELECT tblProducts.productID,tblProducts.productName,tblProducts.price,tblProducts.quantity," +
+                "tblCondition.conditionName,tblStatus.statusName,tblType.typeName,tblProducts.approvalID" +
+                " FROM tblProducts,tblCondition,tblStatus,tblType WHERE tblCondition.conditionID = tblProducts.conditionID " +
+                "AND tblStatus.statusID = tblProducts.statusID AND tblType.typeID = tblProducts.typeID " +
+                "AND tblProducts.approvalID = 1 AND tblProducts.UserId = @0";
+
+    var result = db.Query(sql, userId);
+    var myProductGrid = new WebGrid(source: result, rowsPerPage: 4);
+}
+
+<h1>Pending Posts</h1>
+
+<form action="/Search" method="post">
+
+    <input type="text" name="searchKey" />
+    <input type="submit" value="Search" />
+
+</form>
+
+<div class="grid">
+    @myProductGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: myProductGrid.Columns(
+            myProductGrid.Column("productName", "Products",
+                format: @<text>
+    <img src="@Href("~/ProductImages", item.productID + "_thumb.png")" />
+    </text>
+            ),
+            myProductGrid.Column("", "",
+                format: @<text>
+    <h3>
+        @item.productName
+    </h3>
+        <p>
+            <b>Price:</b>@item.price
+
+        </p>
+        <p><b>Quantity: </b>@item.quantity
+        </p>
+    </text>
+                ),
+            myProductGrid.Column("", "",
+            format: @<text>
+    <p>
+        <b>Condition: </b>@item.conditionName
+    </p>
+    <p>
+        <b>Status: </b>@item.statusName
+    </p>
+    <p>
+        <b>Type: </b>@item.typeName
+    </p>
+    
+    
+    </text>
+            )
+        )
+    )
+</div>
+
+
+
+

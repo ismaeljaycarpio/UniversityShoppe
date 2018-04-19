@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "~/shared/layouts/_adminlayout.cshtml";
+    
+    if(!WebSecurity.IsAuthenticated)
+    {
+        Response.Redirect("~/");
+    }
+}

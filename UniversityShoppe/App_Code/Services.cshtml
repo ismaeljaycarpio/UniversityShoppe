@@ -1,0 +1,82 @@
+﻿@helper ServiceTypeDropDownList(string name, string selectedValue)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT serviceTypeID, serviceTypeName FROM tblServiceType ORDER BY serviceTypeName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var type in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = type.serviceTypeID.ToString(),
+                Text = type.serviceTypeName.ToString()
+            });
+    }
+    @Html.DropDownList(name, null, optionList, selectedValue, null);
+}
+
+
+@helper ServiceStatusDropDownList(string name, string selectedValue)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT serviceStatusID, serviceStatusName FROM tblServiceStatus ORDER BY serviceStatusName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var status in result)
+    {
+        optionList.Add(new SelectListItem
+            {
+                Value = status.serviceStatusID.ToString(),
+                Text = status.serviceStatusName.ToString()
+            });
+    }
+    @Html.DropDownList(name, null, optionList, selectedValue, null); 
+}
+
+
+@helper ApprovalDropDownList(string name, string selectedValue)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("StarterSite");
+
+    var sqlSelect = "SELECT approvalID, approvalName FROM tblApproval ORDER BY approvalName";
+    var result = db.Query(sqlSelect);
+
+    foreach (var approval in result)
+    {
+        optionList.Add(new SelectListItem
+         {
+             Value = approval.approvalID.ToString(),
+             Text = approval.approvalName.ToString()
+         });
+    }
+    @Html.DropDownList(name, null, optionList, selectedValue, null); 
+}
+
+
+@helper ShowServiceImage(string productID)
+{
+    var imagePath = @"~/ServicesImage/" + productID + ".png";
+    if(!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ServicesImage/noImage.png";
+        
+    }   
+    <img src="@Href(imagePath)" alt="Product Image" />
+}
+@helper ShowServiceThumbnail(string productID)
+{
+    var imagePath = @"~/ServicesImage/" + productID + "_thumb.png";
+    if(!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/ServicesImage/noThumb.png";
+        
+    }   
+    <img src="@Href(imagePath)" alt="Service Image" />
+}
+
+

@@ -1,0 +1,16 @@
+﻿@functions
+{
+    public static bool CategoryExists(string catName)
+    {
+        var db = Database.Open("StarterSite");
+        var sqlSelect = "SELECT catID FROM tblCategories WHERE catName = @0";
+        return db.Query(sqlSelect, catName).Count() > 0;
+    }
+    
+    public static bool CategoryIsEmpty(string catID)
+    {
+        var db = Database.Open("StarterSite");
+        var sqlSelect = "SELECT productID FROM tblProducts WHERE catID = @0";
+        return db.Query(sqlSelect, catID).Count() == 0;
+    }
+}

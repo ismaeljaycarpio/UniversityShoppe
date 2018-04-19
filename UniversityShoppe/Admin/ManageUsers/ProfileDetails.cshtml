@@ -1,0 +1,80 @@
+﻿@{
+    Page.Title = "Title goes here";
+    //Layout = "Your Layout Page goes here";
+    var UserId = UrlData[0];
+    
+    var userName = "";
+    var lastName  = "";
+    var firstName = "";
+    var contactNo = "";
+    var email = "";
+
+
+    
+    
+    if(!UrlData[0].IsEmpty())
+    {
+        var sqlSelect = "SELECT * FROM UserProfile WHERE UserId = @0";
+        var db = Database.Open("StarterSite");
+        var member = db.QuerySingle(sqlSelect, UserId);
+
+        userName = member.userName;
+        lastName = member.lastName;
+        firstName = member.firstName;
+        contactNo = member.contactNo.ToString();
+        email = member.email;
+    }
+    
+    
+}
+
+<h1>@userName 's Profile</h1>
+
+<div id="productForm">
+
+    <form action="" method="post">
+
+        @MemberProfile.ShowProfileImage(UserId)
+
+    <h2>Account Information</h2>
+        <p>
+            @Html.Label("Username:", userName)
+            <br />
+            @Html.TextBox("userName", userName)
+            @Html.ValidationMessage("userName")
+        </p>
+
+    <p>
+            @Html.Label("Lastname:", lastName)
+            <br />
+            @Html.TextBox("lastName", lastName)
+            @Html.ValidationMessage("lastName")
+        </p>
+
+    <p>
+            @Html.Label("FirstName:", firstName)
+            <br />
+            @Html.TextBox("firstName", firstName)
+            @Html.ValidationMessage("firstName")
+        </p>
+
+
+    <h2>Contact Information</h2>
+    <p>
+            @Html.Label("Contact Number:", contactNo)
+            <br />
+            @Html.TextBox("contactNo", contactNo)
+            @Html.ValidationMessage("contactNo")
+        </p>
+
+    <p>
+            @Html.Label("Email:", email)
+            <br />
+            @Html.TextBox("email", email)
+            @Html.ValidationMessage("email")
+        </p>
+
+    <input type="submit" value="Save" />
+</form>
+
+</div>

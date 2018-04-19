@@ -1,0 +1,29 @@
+﻿@{
+    Page.Title = "Search Result";
+
+    var db = Database.Open("StarterSite");
+    var searchKeyword = Request["searchKey"].Split(' ');
+    IEnumerable<dynamic> searchResult = Enumerable.Empty<string>();
+
+    var sqlSelect = "SELECT productID,productName FROM tblProducts WHERE " +
+                        "productName LIKE @0 OR description LIKE @0";
+
+    foreach (var word in searchKeyword)
+    {
+        searchResult = searchResult.Concat(db.Query(sqlSelect, "%" + word + "%").ToList());
+    }
+    
+}
+<h1>Search Results</h1>
+
+<p>@searchResult.Count() product(s) found matching: <em>@Request["searchKey"]</em></p>
+
+<ul id="searchResult">
+    @foreach (var item in searchResult)
+    {
+        <li>
+            <a href="/ProductDetails/@item.productID">@item.productName</a>
+        </li>
+        
+    }
+</ul>

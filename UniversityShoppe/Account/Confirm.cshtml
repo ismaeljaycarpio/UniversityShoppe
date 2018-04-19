@@ -1,0 +1,24 @@
+﻿@{
+    Page.Title = "Registration Confirmation";
+    //Layout = "Your Layout Page goes here";
+
+    string message = "";
+    var confirmationToken = Request["confirmationCode"];
+
+    WebSecurity.Logout();
+    if(!confirmationToken.IsEmpty())
+    {
+        if(WebSecurity.ConfirmAccount(confirmationToken))
+        {
+            message = "Registration Confirmed. You can now login.";
+        }
+        else{
+            message = "Could not confirm your registration info";
+        }
+    }
+}
+
+@if (!message.IsEmpty())
+{
+    <p>@message</p>
+}

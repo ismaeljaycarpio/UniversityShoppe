@@ -1,0 +1,141 @@
+﻿@{
+    Page.Title = "Title goes here";
+    //Layout = "Your Layout Page goes here";
+
+    var adsID = "new";
+    var adsTitle = "";
+    var adsOwner = "";
+    var adsLink = "";
+    var adsDescription = "";
+
+    var db = Database.Open("StarterSite");
+
+    if (!UrlData[0].IsEmpty())
+    {
+        adsID = UrlData[0];
+        var sql = "SELECT * FROM tblAds WHERE adsID = @0";
+        var ads = db.QuerySingle(sql, adsID);
+
+        adsTitle = ads.adsTitle;
+        adsOwner = ads.adsOwner;
+        adsLink = ads.adsLink;
+        adsDescription = ads.adsDescription;
+    }
+
+    //Validate
+    Validation.Add("adsTitle", Validator.Required("Title is a required field"));
+    Validation.Add("adsOwner", Validator.Required("Ads Owner is a required field"));
+    Validation.Add("adsLink", Validator.Required("Ads Link is a required field"));
+    Validation.Add("adsDescription", Validator.Required("Description is a required field"));
+    
+    if (IsPost)
+    {
+        var sqlStatement = "";
+
+        //if (Validation.IsValid())
+        //{
+            adsID = Request["adsID"];
+            adsTitle = Request["adsTitle"];
+            adsOwner = Request["adsOwner"];
+            adsLink = Request["adsLink"];
+            adsDescription = Request["adsDescription"];
+
+            if (adsID == "new")
+            {
+                sqlStatement = "INSERT INTO tblAds (adsTitle,adsOwner,adsLink,adsDescription) " +
+                                "VALUES(@0,@1,@2,@3)";
+
+                db.Execute(sqlStatement, adsTitle, adsOwner, adsLink, adsDescription);
+                adsID = db.GetLastInsertId().ToString();
+            }
+            else
+            {
+                sqlStatement = "UPDATE tblAds SET adsTitle = @0, adsOwnser = @1, " +
+                                "adsLink = @2, adsDescription = @3";
+
+                db.Execute(sqlStatement, adsTitle, adsOwner, adsLink, adsDescription);
+            }
+
+            var adsImage = WebImage.GetImageFromRequest();
+            if (adsImage != null)
+            {
+                // Save main product image
+                var savePath = @"~\AdsImages\" + adsID;
+                adsImage.Resize(width: 235, height: 210,
+                    preserveAspectRatio: true, preventEnlarge: true);
+                adsImage.Save(filePath: savePath + ".png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true);
+
+                // Resize and save thumbnail
+                adsImage.Resize(height: 120, width: 120,
+                                    preserveAspectRatio: true);
+                adsImage.Save(filePath: savePath + "_thumb.png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true);
+            }
+            Response.Redirect("~/Admin/ManageAds/");
+
+        //}
+    }
+}
+
+<h2>Add Advertisement</h2>
+
+
+<fieldset class="accountForm">
+    <legend>Advertisement Details</legend>
+    <form  method="post" enctype="multipart/form-data">
+        <p>
+            @Html.Hidden("adsID", adsID)
+        </p>
+
+        <div class="row">
+            <label class="label" for="adsTitle">Title: *</label>
+            <span>@Html.TextBox("adsTitle", adsTitle)</span>
+            @Html.ValidationMessage("adsTitle")
+        </div>
+        <br />
+
+
+        <div class="row">
+            <label class="label" for="adsOwner">Owner: *</label>
+            <span>@Html.TextBox("adsOwner", adsOwner)</span>
+            @Html.ValidationMessage("adsOwner")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="adsLink">Link: *</label>
+            <span>@Html.TextBox("adsLink", adsLink)</span>
+            @Html.ValidationMessage("adsLink")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="adsDescription">Description: *</label>
+            <span>@Html.TextArea("adsDescription", adsDescription, 10, 40, null)</span>
+            @Html.ValidationMessage("adsDescription")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="adsImage">Image: *</label>
+            @if (adsID == "new")
+            {
+                <span><input type="file" name="adsImage" /></span>
+            }
+            else
+            {
+                @Products.ShowAdsImages(adsID)
+            }
+            
+        </div>
+        <br />
+
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+
+    </form>
+</fieldset>

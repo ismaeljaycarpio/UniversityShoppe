@@ -1,0 +1,46 @@
+﻿@{
+    Page.Title = "Members";
+    //Layout = "Your Layout Page goes here";
+
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT * FROM UserProfile ORDER BY userName";
+    var members = db.Query(sqlSelect);
+
+    var membersGrid = new WebGrid(source: members,
+                               rowsPerPage: 3);
+}
+
+
+@if (members.Count() == 0)
+{
+    <p>
+        No members found
+    </p>
+}
+else
+{
+    <div class="grid">
+    @membersGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: membersGrid.Columns(
+                membersGrid.Column("userName","Name",
+                                format: @<text>
+                                <ul id=productsList>
+                                    <li>
+                                        <h3>
+                                            <a href="MemberDetails/@item.UserId">@item.userName</a>
+                                        </h3>                                        
+                                        <p>
+                                            <img src="@Href("~/ProfileImages",item.UserId + "_thumb.png")" />
+                                        </p>
+                                    </li>
+                                </ul>
+                                </text>)
+                                    ))
+
+</div>
+    
+}

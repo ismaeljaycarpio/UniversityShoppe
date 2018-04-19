@@ -1,0 +1,156 @@
+﻿@{
+    Page.Title = "Register";
+
+    //init
+    var userName = "";
+    var passWord = "";
+    var confirmPassword = "";
+    var lastName = "";
+    var firstName = "";
+    var email = "";
+    var contactNo = "";
+
+    
+
+    if (IsPost)
+    {
+        //Validate
+        Validation.Add("userName",
+            Validator.Required("Username is required"),
+            Validator.StringLength(20, 6, "Must be 6 to 20 characters only"));
+
+        Validation.Add("passWord", Validator.Required("Password is required"));
+        Validation.Add("confirmPassword", Validator.EqualsTo("passWord", "Password and Confirm Password must match"));
+        Validation.Add("lastName", Validator.Required("Last Name is required"));
+        Validation.Add("firstName", Validator.Required("First Name is required"));
+        Validation.Add("email", Validator.Required("Email is required"));
+        Validation.Add("contactNo", Validator.Required("Contact Number is required"));
+        
+        
+        if (Validation.IsValid())
+        {
+            userName = Request["userName"];
+            passWord = Request["passWord"];
+            lastName = Request["lastName"];
+            firstName = Request["firstName"];
+            email = Request["email"];
+            contactNo = Request["contactNo"];
+
+            var db = Database.Open("StarterSite");
+
+            //chk if user already exists
+            var user = db.QuerySingle("SELECT userName FROM UserProfile WHERE LOWER(userName) = LOWER(@0)", userName);
+            if (user == null)
+            {
+                //insert new user
+                db.Execute("INSERT INTO UserProfile (userName,email,lastName,firstName,contactNo) VALUES (@0,@1,@2,@3,@4)",
+                    userName, email, lastName, firstName, contactNo);
+
+                // Create and associate a new entry in the membership database.
+                // If successful, continue processing the request
+
+                try
+                {
+                    bool requireEmailConfirmation = !WebMail.SmtpServer.IsEmpty();
+                    var token = WebSecurity.CreateAccount(userName, passWord, requireEmailConfirmation);
+                    if (requireEmailConfirmation)
+                    {
+                        var hostUrl = Request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+                        var confirmationUrl = hostUrl + VirtualPathUtility.ToAbsolute("~/Account/Confirm?confirmationCode=" + HttpUtility.UrlEncode(token));
+
+                        WebMail.Send(to: email,
+                            subject: "Please confirm your account",
+                            body: "Your confirmation code is: " + token + ". Visit <a href=\"" + confirmationUrl + "\">" + confirmationUrl + "</a> to activate your account.");
+                    }
+                    if (requireEmailConfirmation)
+                    {
+                        Response.Redirect("~/Account/Thanks");
+                    }
+                    else
+                    {
+                        WebSecurity.Login(userName, passWord);
+                        Response.Redirect("~/");
+                    }
+
+
+                }
+                catch (System.Web.Security.MembershipCreateUserException e)
+                {
+                    ModelState.AddFormError(e.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("Username is already in use.");
+            }
+
+        }
+    }
+    
+    
+}
+
+
+
+<fieldset class="accountForm">
+
+    <legend>Registration</legend>
+
+    <form method="post">
+        <div class="row">
+            <label class="label" for="userName">Username: *</label>
+            <span>@Html.TextBox("userName", userName)</span>
+            @Html.ValidationMessage("userName")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="passWord">Password: *</label>
+            <span>@Html.Password("passWord", passWord)</span>
+            @Html.ValidationMessage("passWord")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="confirmPassword">Confirm Password: *</label>
+            <span>@Html.Password("confirmPassword", confirmPassword)</span>
+            @Html.ValidationMessage("confirmPassword")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="lastName">Last Name: *</label>
+            <span>@Html.TextBox("lastName", lastName)</span>
+            @Html.ValidationMessage("lastName")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="firstName">First Name: *</label>
+            <span>@Html.TextBox("firstName", firstName)</span>
+            @Html.ValidationMessage("firstName")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="Email">Email: *</label>
+            <span>@Html.TextBox("email", email)</span>
+            @Html.ValidationMessage("email")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="contactNo">Contact No: *</label>
+            <span>@Html.TextBox("contactNo", contactNo)</span>
+            @Html.ValidationMessage("contactNo")
+        </div>
+        <br />
+
+        <p>
+            <input type="submit" value="Register" />
+            <input type="reset" value="Reset" />
+        </p>
+
+    </form>
+</fieldset>
+

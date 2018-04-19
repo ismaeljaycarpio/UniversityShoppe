@@ -1,0 +1,644 @@
+﻿/*
+-----------------------------------------------------------------------
+General Styles
+-----------------------------------------------------------------------
+*/
+
+*, html, body
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+body
+{
+    background-color: #efefef;
+    color: #333;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    font-size: .75em;
+}
+
+a:link
+{
+    color: #333399;
+    text-decoration: none;
+}
+
+a:visited
+{
+    color: #333399;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: #a70202;
+    text-decoration: none;
+}
+
+h1, h2
+{
+    margin-bottom: 10px;
+}
+
+input, select
+{
+    padding: 5px;
+}
+
+    input[type="text"]
+    {
+        border: 1px solid #cdcdcd;
+    }
+
+.site-title a
+{
+    background: transparent url(../Images/banner.png) no-repeat;
+    float: left;
+    height: 90px;
+    text-indent: -9999px;
+    width: 300px;
+}
+
+/*
+-----------------------------------------------------------------------
+Menu Bar
+-----------------------------------------------------------------------
+*/
+#navstrip
+{
+    width: 100%;
+}
+
+#nav
+{
+    width: 100%;
+    /*margin: auto;*/
+    background-color: #717171;
+    border-bottom: 1px solid black;
+    line-height: 30px;
+    color: #000;
+}
+
+    #nav a, #nav a:hover, #nav a:visited
+    {
+        color: #fff;
+        font-size: 1.5em;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 2px 10px;
+    }
+
+
+
+#head
+{
+    width: 960px;
+}
+
+#accountSummary
+{
+    margin-top: 10px;
+    text-align: right;
+}
+
+
+
+/*
+-----------------------------------------------------------------------
+Layout
+-----------------------------------------------------------------------
+*/
+#page
+{
+    margin: 0 auto;
+    padding: 0px;
+    width: 90%;
+    background-color: #fff;
+}
+
+#header
+{
+    width: 100%;
+    height: 85px;
+    background-color: white;
+}
+
+#content, #footer
+{
+    border-top: 1px solid #cdcdcd;
+    clear: both;
+    margin: 0px 5px 0px 5px;
+}
+
+#footer
+{
+    color: #cdcdcd;
+    padding: 10px;
+    text-align: center;
+}
+
+.logo a
+{
+    float: left;
+    margin: 15px;
+    font-family: sans-serif;
+    font-size: 3em;
+}
+
+#categories
+{
+    float: left;
+    padding: 5px;
+    margin-top: 20px;
+    width: 20%;
+}
+
+    #categories ul
+    {
+        border-bottom: 1px solid #cdcdcd;
+        margin-bottom: 1px;
+    }
+
+        #categories ul li
+        {
+            list-style: none;
+            border-top: 1px solid #cdcdcd;
+            margin: 0;
+            padding: 10px;
+            font-size: 1.3em;
+        }
+
+            #categories ul li:hover
+            {
+                background-color: #ddd;
+            }
+
+            #categories ul li.current
+            {
+                background-color: #ffd800;
+            }
+
+    #categories h3
+    {
+        font-weight: bold;
+    }
+
+
+
+/*
+-----------------------------------------------------------------------
+Search
+-----------------------------------------------------------------------
+*/
+#headerRight
+{
+    float: right;
+    margin-right: 2%;
+}
+
+#search
+{
+    margin-top: 15px;
+    text-align: right;
+}
+
+/*
+-----------------------------------------------------------------------
+Content Page
+-----------------------------------------------------------------------
+*/
+#main
+{
+    float: left;
+    width: 57%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+    #main h1
+    {
+        border-bottom: 1px dotted #cdcdcd;
+    }
+
+.standardForm
+{
+    border-radius: 3px;
+    width: 95%;
+    background-color: #ddd;
+    padding: 15px;
+    font-weight: bold;
+}
+
+    
+
+.contentStandardForm
+{
+    border-radius: 3px;
+    width: 95%;
+    background-color: #efefef;
+    padding: 15px;
+}
+
+    .contentStandardForm label
+    {
+        font-weight: bold;
+    }
+/*
+-----------------------------------------------------------------------
+Adspace
+-----------------------------------------------------------------------
+*/
+#manageads
+{
+    background-color: #efefef;
+    float: right;
+    width: 20%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#manageadsone
+{
+    background-color: #a70202;
+    height: 220px;
+}
+
+#manageadstwo
+{
+    background-color: #ffd800;
+    height: 220px;
+}
+
+#manageadsthree
+{
+    background-color: #ddd;
+    height: 150px;
+}
+
+/*
+-----------------------------------------------------------------------
+Products List
+-----------------------------------------------------------------------
+*/
+#productsList
+{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+    #productsList li
+    {
+        float: left;
+        margin:3px;
+        width: 30%;
+        text-align: center;
+        height: 160px;
+        border: 1px solid #ddd;
+    }
+
+
+    #productsList h3
+    {
+        font-size: 1.2em;
+        font-weight: normal;
+        margin-bottom: 5px;
+        padding: 0px;
+        font-size-adjust: inherit;
+        font-weight: bold;
+    }
+
+    #productsList .price
+    {
+        font-size: 1em;
+        color: #900;
+        font-weight: bold;
+    }
+
+/*
+-----------------------------------------------------------------------
+Product Details
+-----------------------------------------------------------------------
+*/
+#productDetails
+{
+    float: left;
+    width: 50%;
+}
+
+    #productDetails .price
+    {
+        font-size: 1em;
+        font-style: italic;
+        color: #900;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    #productDetails h2
+    {
+        color: #75f312;
+        width: 100%;
+    }
+
+#memberForm
+{
+    float:left;
+    width:50%;
+    
+}
+    
+#memberForm fieldset {
+    margin: 0px;
+    padding: 10px;
+    border: 1px solid #cdcdcd;
+}
+
+    #memberForm .fullname
+    {
+        font-size: 1em;
+        font-style: italic;
+        color: #999;
+        margin-bottom: 10px;
+    }
+    #memberForm fieldset img
+    {
+        vertical-align: middle;
+        padding: 10px;
+    }
+    #memberForm fieldset a
+    {
+        color: #06c;
+    }
+#memberForm legend {
+    font-weight: bold;
+    padding:0px 10px 0px 10px;
+
+}
+    #memberForm fieldset ul
+    {
+        
+    }
+        #memberForm fieldset ul li
+        {
+            list-style: none;
+            border-top: 1px solid #cdcdcd;
+            text-align: justify;
+            height: 30px;
+            vertical-align: middle;
+            padding-top: 10px;
+        }
+#memberForm label {
+    font-weight: bold;
+}
+
+#memberForm input[type="submit"] {
+    margin-top:20px;
+    padding: 5px;
+    width: 100%;
+}
+/*
+-----------------------------------------------------------------------
+Search Result
+-----------------------------------------------------------------------
+*/
+#searchResult li
+{
+    margin-top: 10px;
+    font-size: 1.2em;
+    list-style: none;
+}
+
+/*
+-----------------------------------------------------------------------
+Registration Form
+-----------------------------------------------------------------------
+*/
+.accountForm
+{
+    background-color: #efefef;
+    border-radius: 5px;
+    padding-top: 20px;
+    width: 100%;
+}
+
+    .accountForm fieldset
+    {
+        width: 100%;
+    }
+
+    .accountForm legend
+    {
+        font-size: 1.2em;
+        background-color: #a7b3a7;
+        color: #f7fff7;
+        font-weight: bold;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .accountForm row
+    {
+        clear: both;
+        margin: 5px;
+    }
+
+
+    .accountForm label
+    {
+        float: left;
+        width: 150px;
+        text-align: right;
+        padding-right: 15px;
+        font-weight: bold;
+    }
+    .accountForm img
+    {
+        margin-left: 100px;
+        padding: 15px;
+    }
+
+
+    .accountForm input[type="submit"]
+    {
+        margin-left: 160px;
+    }
+
+
+/*
+-----------------------------------------------------------------------
+Validation 
+-----------------------------------------------------------------------
+*/
+.field-validation-error,
+span.field-validation-error
+{
+    color: #FF0000;
+}
+
+.input-validation-error
+{
+    border: 1px solid #FFEBEB;
+    background-color: #FFEBEB;
+}
+.validation-summary-errors
+{
+    
+    color: #FF0000;
+}
+    .validation-summary-errors ul li
+    {
+        margin-left: 45px;
+        margin-bottom: 20px;
+        list-style: none;
+    }
+
+/*
+-----------------------------------------------------------------------
+Login Form
+-----------------------------------------------------------------------
+*/
+.loginForm label
+{
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+.loginForm p
+{
+    padding: 5px 0px 5px 0px;
+}
+
+input[type="password"]
+{
+    border: 1px solid #cdcdcd;
+}
+
+
+/*
+-----------------------------------------------------------------------
+Home Page
+-----------------------------------------------------------------------
+*/
+#featuredProductImage
+{
+    float: left;
+    width: 380px;
+}
+
+#featuredProductDetails
+{
+    float: left;
+    width: 250px;
+}
+
+    #featuredProductDetails h3
+    {
+        margin-bottom: 20px;
+    }
+
+    #featuredProductDetails .price
+    {
+        font-size: 1em;
+        font-style: italic;
+        color: #900;
+        margin: 10px 0px 10px 0px;
+        font-weight: bold;
+    }
+
+
+#latestProducts
+{
+    clear: both;
+    padding-top: 25px;
+}
+
+#latestProductsList
+{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+    #latestProductsList li
+    {
+        float: left;
+        margin: 10px 18px 10px 18px;
+        text-align: center;
+    }
+
+        #latestProductsList li a img
+        {
+            border: none;
+        }
+/*
+-----------------------------------------------------------------------
+Profile
+-----------------------------------------------------------------------
+*/
+
+#profileSummary
+{
+    width: 100%;
+    margin-bottom: 280px;
+}
+
+#showProfileImage
+{
+    float: left;
+    width: 50%;
+}
+
+#showProfileSummary
+{
+    float: left;
+    width: 50%;
+}
+
+#accordion
+{
+}
+
+    #accordion ul li.current
+    {
+        background-color: #ffd800;
+    }
+
+.button {
+	-moz-box-shadow:inset 0px 1px 0px 0px #cae3fc;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #cae3fc;
+	box-shadow:inset 0px 1px 0px 0px #cae3fc;
+	background-color:#79bbff;
+	-webkit-border-top-left-radius:0px;
+	-moz-border-radius-topleft:0px;
+	border-top-left-radius:0px;
+	-webkit-border-top-right-radius:0px;
+	-moz-border-radius-topright:0px;
+	border-top-right-radius:0px;
+	-webkit-border-bottom-right-radius:0px;
+	-moz-border-radius-bottomright:0px;
+	border-bottom-right-radius:0px;
+	-webkit-border-bottom-left-radius:0px;
+	-moz-border-radius-bottomleft:0px;
+	border-bottom-left-radius:0px;
+	text-indent:0;
+	border:1px solid #469df5;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:15px;
+	font-weight:bold;
+	font-style:normal;
+	height:40px;
+	line-height:40px;
+	width:100px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #287ace;
+}.button:hover {
+	background-color:#4197ee;
+}.button:active {
+	position:relative;
+	top:1px;
+}

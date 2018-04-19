@@ -1,0 +1,106 @@
+﻿@{
+    Page.Title = "Title goes here";
+
+
+    var productID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT tblProducts.productID,tblProducts.productName,tblProducts.price,tblProducts.quantity," +
+                "tblProducts.datePosted,tblProducts.UserId,tblProducts.description,tblCondition.conditionName,tblType.typeName," +
+                "tblCategories.catName FROM tblProducts,tblCondition,tblType,tblCategories WHERE tblCondition.conditionID = tblProducts.conditionID " +
+                "AND tblType.typeID = tblProducts.typeID AND tblProducts.categoryID = tblCategories.catID " +
+                "AND tblProducts.productID = @0";
+
+    var product = db.QuerySingle(sqlSelect, productID);
+
+    var userId = product.UserId;
+
+    var sql = "SELECT UserProfile.UserId,UserProfile.userName,UserProfile.lastName,UserProfile.firstName, " +
+                "UserProfile.contactNo,UserProfile.CityProv,webpages_Membership.CreateDate FROM UserProfile,webpages_Membership" +
+                " WHERE UserProfile.UserId = webpages_Membership.UserId AND UserProfile.UserId = @0";
+
+    var profile = db.QuerySingle(sql, userId);
+
+    
+    
+}
+
+@if (product == null)
+{
+    <p>
+        Unable to fetch product details.
+    </p>
+}
+else
+{
+    Page.Title = @product.productName;
+    
+    
+    <h1>@product.productName</h1>
+
+    <div id="productDetails">
+        <p class="price">
+            Php @product.price
+        </p>
+
+        <p>
+            @Products.ShowProductImage(productID)
+        </p>
+
+        <h2>Desciption</h2>
+
+        <p>
+            @product.description
+        </p>
+    </div>
+      
+    <div id="memberForm">
+        <fieldset>
+            <legend>Product's Details</legend>
+            <ul>
+                <li>
+                    <b>Price: </b> Php @product.price.00
+                </li>
+                <li>
+                    <b>Quantity: </b> @product.quantity
+                </li>
+                <li>
+                    <b>Date Posted: </b> @product.datePosted.ToLongDateString()
+                </li>
+                <li>
+                    <b>Type: </b> @product.typeName
+                </li>
+                <li>
+                    <b>Condition: </b> @product.conditionName
+                </li>
+                <li>
+                    <b>Category: </b> @product.catName
+                </li>
+            </ul>
+        </fieldset>
+
+
+
+        <fieldset>
+            <legend>Poster's Details</legend>
+                <p class="fullName">
+                       <img src="@Href("~/ProfileImages", profile.UserId + "_thumb.png") "/>
+                        <a href="/MemberDetails/@profile.UserId">@profile.userName</a>  
+                </p>
+                
+            <ul>
+                <li>
+                    <b>Member Since: </b> @profile.CreateDate.ToLongDateString()
+                </li>
+                <li>
+                    <b>Member Address: </b> @profile.CityProv
+                </li>
+                <li>
+                    <b>Contact Number: </b> @profile.contactNo
+                </li>
+            </ul>
+            
+        </fieldset>
+    </div>
+    
+}

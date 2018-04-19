@@ -1,0 +1,11 @@
+﻿@{
+    Page.Title = "My Store";
+    //Layout = "Your Layout Page goes here";
+
+    if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+    {
+        Response.Redirect("~/Admin/");
+    }
+
+}
+

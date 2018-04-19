@@ -1,0 +1,103 @@
+﻿@{
+    Page.Title = "Login";
+
+    WebSecurity.Logout();
+
+
+    //init
+    var userName = "";
+    var passWord = "";
+    var rememberMe = false;
+
+    //validate
+    Validation.Add("userName", Validator.Required("Username is a required field"));
+    Validation.Add("passWord", Validator.Required("Password is a required field"));
+
+
+    if (IsPost)
+    {
+        if (Validation.IsValid())
+        {
+            userName = Request["userName"];
+            passWord = Request["passWord"];
+            rememberMe = Request["rememberMe"].AsBool();
+
+            if (WebSecurity.UserExists(userName) &&
+                    WebSecurity.GetPasswordFailuresSinceLastSuccess(userName) > 4
+                        && WebSecurity.GetLastPasswordFailureDate(userName).AddSeconds(60) > DateTime.UtcNow)
+            {
+                Response.Redirect("~/Account/AccountLockedOut");
+                return;
+            }
+
+
+            if (WebSecurity.Login(userName, passWord, rememberMe))
+            {
+                if (Request.QueryString["sender"] != null)
+                {
+                    Response.Redirect(Request.QueryString["sender"]);
+                }
+                else
+                {
+                    
+                        
+                        Response.Redirect("~/Member/MyPost/MyStore");
+           
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("Incorrect username and password combination.");
+            }
+        }
+    }
+    
+    
+    
+}
+
+
+<div class="standardForm">
+    Please login. If you do not have an existing account <a href="~/Account/Register?@Request.QueryString">Register here.</a>
+</div>
+
+
+
+<div class="accountForm">
+
+    @Html.ValidationSummary(true)
+    <form action="Login?@Request.QueryString" method="post">
+
+
+        <div class="row">
+            <label class="label" for="userName">Username:</label>
+            <span>@Html.TextBox("userName", userName)</span>
+            @Html.ValidationMessage("userName")
+        </div>
+        <br />
+
+        <div class="row">
+            <label class="label" for="passWord">Password:</label>
+            <span>@Html.Password("passWord")</span>
+            @Html.ValidationMessage("passWord")
+        </div>
+        <br />
+
+
+        <p>
+            @Html.CheckBox("rememberMe", new { value = "true" })
+            @Html.Label("Remember me?", "rememberMe")
+        </p>
+
+        <div class="row">
+            <span><input type="submit" value="Login" /></span>
+        </div>
+    </form>
+</div>
+
+<div class="standardForm">
+    <a href="ForgotPassword">Forgot Password?</a>
+</div>
+
+
+

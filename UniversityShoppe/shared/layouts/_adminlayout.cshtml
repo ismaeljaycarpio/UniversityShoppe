@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>University Shoppe - @Page.Title</title>
+    <link href="@Href("~/Css/Style.css")" rel="stylesheet" />
+    <link href="@Href("~/Css/AdminStyle.css")" rel="stylesheet" />
+    @RenderSection("head", required: false)
+
+
+    <link href="~/Css/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#accordion').accordion(
+               {
+                   autoHeight: false,
+                   navigation: true
+               });
+
+        });
+    </script>
+
+
+</head>
+<body>
+    <div id="page">
+
+        <div id="headerRight">
+                <div id="accountSummary">
+                    @MembershipHelpers.AccountSummary()
+                </div>
+                <div id="search">
+                    @RenderPage("~/shared/partials/_search.cshtml")
+                </div>
+            </div>
+
+        <div id="header">
+            <p class="site-title"><a href="~/">University Shoppe</a></p>   
+        </div>
+
+
+        <div id="navstrip">
+            <div id="nav">
+
+                    <a href="@Href("~/Default")">Home |</a>
+                    <a href="@Href("~/About")">About |</a>
+                    <a href="@Href("~/Contact")">Contact |</a>
+                    @if (WebSecurity.IsAuthenticated && !Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+                    {
+                        <a href="@Href("~/Admin/ManageProducts/ProductDetails")">Post Ad |</a>
+                        <a href="@Href("~/Members")">Members |</a>
+                    }
+
+            </div>
+        </div>
+
+
+        <div id="content">
+            <div id="categories">
+                @RenderPage("~/shared/partials/_adminmenu.cshtml")
+            </div>
+            <div id="main">
+                @RenderBody()
+            </div>
+
+            <div id="manageads">
+                <h3>Sponsored Ads</h3>
+
+                <div id="manageadsone">
+                </div>
+                <div id="manageadstwo">
+                </div>
+                <div id="manageadsthree">
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footer">
+            &copy;@DateTime.Now.Year University Shoppe. All rights reserved.
+        </div>
+
+    </div>
+
+</body>
+</html>

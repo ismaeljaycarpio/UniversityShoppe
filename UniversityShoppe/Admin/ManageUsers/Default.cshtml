@@ -1,0 +1,37 @@
+﻿@{
+    Page.Title = "Members";
+    //Layout = "Your Layout Page goes here";
+    var db = Database.Open("StarterSite");
+    var sqlSelect = "SELECT * FROM UserProfile ORDER BY userName";
+    var members = db.Query(sqlSelect);
+
+    var membersGrid = new WebGrid(source: members,
+                               rowsPerPage: 5);
+}
+
+<h1>Members</h1>
+
+<form action="/Search" method="post">
+
+    <input type="text" name="searchKey" />
+    <input type="submit" value="Search" />
+
+</form>
+
+<div class="grid">
+    @membersGrid.GetHtml(
+    tableStyle: "grid",
+    headerStyle: "gridHeader",
+    alternatingRowStyle: "gridAlt",
+    footerStyle: "gridFooter",
+    columns: membersGrid.Columns(
+    membersGrid.Column("userName", "Username",
+    format: @<text>
+                    <a href="ProfileDetails/@item.UserId">@item.userName</a>
+            </text>),
+    membersGrid.Column("contactNo", "Contact No"),
+    membersGrid.Column("email","Email")
+    
+    ))
+
+</div>
